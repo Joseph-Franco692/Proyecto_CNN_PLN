@@ -1,0 +1,20 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data folders (dataset pesado)
+CrisisMMD_v2.0/
+
+# Model weights / checkpoints
+*.pth
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
