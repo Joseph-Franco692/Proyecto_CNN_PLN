@@ -7,14 +7,22 @@ from torchvision import transforms
 from transformers import DistilBertTokenizer
 
 class CrisisMMDDataset(Dataset):
-    def __init__(self, tsv_file, root_dir, max_length=128):
+    def __init__(self, tsv_files, root_dir, max_length=128):
         """
         Args:
-            tsv_file (string): Path to the TSV annotation file.
-            root_dir (string): Directory with all the images.
-            max_length (int): Maximum length for BERT tokenization.
+            tsv_files (list of string): Lista de rutas a los archivos TSV con anotaciones.
+            root_dir (string): Directorio principal de las imágenes.
+            max_length (int): Longitud máxima para el tokenizador de BERT.
         """
-        self.data_frame = pd.read_csv(tsv_file, sep='\t')
+        self.root_dir = root_dir
+        self.max_length = max_length
+        
+        # Cargar y concatenar múltiples TSVs
+        dfs = []
+        for tsv in tsv_files:
+            df = pd.read_csv(tsv, sep='\t')
+            dfs.append(df)
+        self.data_frame = pd.concat(dfs, ignore_index=True)
         
         # Filtrar muestras unimodales si faltan textos o imágenes
         self.data_frame = self.data_frame.dropna(subset=['tweet_text', 'image_path', 'image_info'])

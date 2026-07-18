@@ -13,13 +13,17 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Instanciar el modelo y cargar los pesos si existen
 model = MultimodalCrisisClassifier(num_classes=2).to(device)
-model_path = "mejor_modelo_crisis.pth"
+model_path = "mejor_modelo_crisis_avanzado.pth"
 
 if os.path.exists(model_path):
-    print(f"Cargando modelo pre-entrenado desde: {model_path}")
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    print(f"Cargando modelo avanzado desde: {model_path}")
+    try:
+        model.load_state_dict(torch.load(model_path, map_location=device))
+        print("¡Pesos cargados exitosamente!")
+    except Exception as e:
+        print(f"Error cargando pesos: {e}. Asegúrate de haber ejecutado 'python train.py' primero.")
 else:
-    print("ADVERTENCIA: No se encontró 'mejor_modelo_crisis.pth'. El modelo usará pesos aleatorios (Entrena primero).")
+    print(f"ADVERTENCIA: No se encontró '{model_path}'. El modelo usará pesos aleatorios (Ejecuta 'python train.py' primero).")
 
 model.eval()
 
